@@ -26,8 +26,10 @@ cTime = 0
 tracks = []
 while True:
     success, img = cap.read()
-    if success == False:
+    if not success:
         break
+
+    img = cv2.resize(img, dsize=(320, 320))
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
     points = {}
