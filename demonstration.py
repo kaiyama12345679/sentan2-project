@@ -50,7 +50,7 @@ while True:
             if len(handLms.landmark) == 21:
                 x = torch.tensor(points, dtype=torch.float64, requires_grad=False)
                 y = model.forward(x)
-                pred = torch.argmax(y)
+                pred = torch.argmax(y).item()
                 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
