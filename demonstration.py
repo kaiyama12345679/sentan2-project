@@ -7,7 +7,7 @@ import argparse
 import torch
 from classification import Network
 
-model = Network
+model = Network(2)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("model", help="model file name")
@@ -28,9 +28,12 @@ mpDraw = mp.solutions.drawing_utils
 pTime = 0
 cTime = 0
 
-
+pred = -1
 while True:
     success, img = cap.read()
+    if not success:
+        print("error")
+        break
 
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
@@ -43,22 +46,28 @@ while True:
                 points.append(lm.x)
                 points.append(lm.y)
 
-                print(id, cx, cy)
+                #print(id, cx, cy)
                 cv2.circle(img, (cx, cy), 15, (255, 0, 255), cv2.FILLED)
 
             mpDraw.draw_landmarks(img, handLms, mp_hands.HAND_CONNECTIONS)
-            if len(handLms.landmark) == 21:
+            if len(points) == 42:
                 x = torch.tensor(points, dtype=torch.float64, requires_grad=False)
+                x = x.float()
                 y = model.forward(x)
+                print(torch.argmax(y))
                 pred = torch.argmax(y).item()
+            else:
+                pred = -1
                 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
     pTime = cTime
     if pred == 0:
         message = "good"
-    else:
+    elif pred == 1:
         message = "bad"
+    else:
+        message = "unknown"
     cv2.putText(img, message, (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
 
     cv2.imshow("Hand Tracking", img)
