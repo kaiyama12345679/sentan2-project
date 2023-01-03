@@ -7,7 +7,7 @@ import argparse
 import torch
 from classification import Network
 
-model = Network(2)
+model = Network(4)
 
 parser = argparse.ArgumentParser()
 parser.add_argument("model", help="model file name")
@@ -34,7 +34,7 @@ while True:
     if not success:
         print("error")
         break
-
+    img = cv2.resize(img, (256, 256))
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
     points = []
@@ -58,6 +58,8 @@ while True:
                 pred = torch.argmax(y).item()
             else:
                 pred = -1
+    else:
+        pred = -1
                 
     cTime = time.time()
     fps = 1 / (cTime - pTime)
@@ -66,6 +68,10 @@ while True:
         message = "good"
     elif pred == 1:
         message = "bad"
+    elif pred == 2:
+        message = "open"
+    elif pred == 3:
+        message = "close"
     else:
         message = "unknown"
     cv2.putText(img, message, (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)

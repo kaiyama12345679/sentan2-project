@@ -29,7 +29,7 @@ while True:
     success, img = cap.read()
     if not success:
         break
-
+    img = cv2.resize(img, (100, 100))
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
     points = {}
@@ -55,7 +55,7 @@ while True:
     pTime = cTime
     cv2.putText(img, str(int(fps)), (10, 70), cv2.FONT_HERSHEY_PLAIN, 3, (255, 0, 255), 3)
 
-    # cv2.imshow("Hand Tracking", img)
+    cv2.imshow("Hand Tracking", img)
     cv2.waitKey(1)
 
 f = open(args.output, 'w', newline='')
