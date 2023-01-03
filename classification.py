@@ -52,7 +52,7 @@ if __name__ == "__main__":
     model.train()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss()
-    for i in range(200):
+    for i in range(250):
         train_load = torch.utils.data.DataLoader(Dataset, batch_size = 8, shuffle=True)
         correct, sum = 0, 0
         for x, t in train_load:

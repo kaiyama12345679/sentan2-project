@@ -29,7 +29,7 @@ while True:
     success, img = cap.read()
     if not success:
         break
-    img = cv2.resize(img, (100, 100))
+    img = cv2.resize(img, (256, 256))
     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
     results = hands.process(imgRGB)
     points = {}
