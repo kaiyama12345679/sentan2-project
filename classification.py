@@ -4,6 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.utils.data
+import matplotlib.pyplot as plt
 
 
 
@@ -52,6 +53,8 @@ if __name__ == "__main__":
     model.train()
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss()
+    acc = []
+    time = 0
     for i in range(250):
         train_load = torch.utils.data.DataLoader(Dataset, batch_size = 8, shuffle=True)
         correct, sum = 0, 0
@@ -65,8 +68,16 @@ if __name__ == "__main__":
             loss = criterion(y, t)
             loss.backward()
             optimizer.step()
+            acc.append(100 * correct / sum)
+            time += 1
 
         print(f"epoch: {i},   loss: {loss},   accuracy: {100 * correct / sum}%")
 
     torch.save(model.state_dict(), "models/sample.pth")
+    graph_x = range(time)
+    plt.plot(graph_x, acc)
+    plt.xlabel("learning steps")
+    plt.ylabel("accuracy")
+    plt.show()
+    
 
