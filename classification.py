@@ -54,8 +54,8 @@ if __name__ == "__main__":
     optimizer = torch.optim.SGD(model.parameters(), lr=0.001)
     criterion = nn.CrossEntropyLoss()
     acc = []
-    time = 0
-    for i in range(250):
+    num_epochs = 250
+    for i in range(num_epochs):
         train_load = torch.utils.data.DataLoader(Dataset, batch_size = 8, shuffle=True)
         correct, sum = 0, 0
         for x, t in train_load:
@@ -68,16 +68,14 @@ if __name__ == "__main__":
             loss = criterion(y, t)
             loss.backward()
             optimizer.step()
-            acc.append(100 * correct / sum)
-            time += 1
-
+        acc.append(100 * correct / sum)
         print(f"epoch: {i},   loss: {loss},   accuracy: {100 * correct / sum}%")
 
     torch.save(model.state_dict(), "models/sample.pth")
-    graph_x = range(time)
+    graph_x = range(num_epochs)
     plt.plot(graph_x, acc)
-    plt.xlabel("learning steps")
-    plt.ylabel("accuracy")
+    plt.xlabel("epoch")
+    plt.ylabel("accuracy[%]")
     plt.show()
     
 
